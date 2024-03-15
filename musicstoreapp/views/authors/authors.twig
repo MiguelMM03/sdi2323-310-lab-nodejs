@@ -1,16 +1,42 @@
 {% extends "../layout.twig" %}
 {% block title %} Autores – uoMusic {% endblock %}
 {% block main_container %}
+    <div class="row">
+        <div id="custom-search-input ">
+            <form id="search-form" method="get">
+                <div class="input-group col-xs-8 col-sm-6 col-md-4 col-lg-5 pull-right">
+                    <input id="filter" type="text" class="search-query form-control"
+                           placeholder="Filtrar por rol" name="filter"/>
+                    <span class="input-group-btn">
+                        <button class="btn" type="submit">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var filterValue = document.getElementById('filter').value;
+            var actionUrl = '/authors/filter/'+filterValue;
+            this.setAttribute('action', actionUrl);
+            window.location.href = actionUrl;
+        });
+    </script>
     <h2>Canciones</h2>
     <div class="row">
         <!-- Inicio del Bloque canción -->
         {% for author in authors %}
             <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
-                <div style="width:200px">
-                    <div class="text-right">{{ author.name }}</div>
-                    <div class="text-right">{{ author.group }}</div>
-                    <div class="text-right">{{ author.role }}</div>
-                </div>
+                <div style="padding:20px">
+                    <div style="width:200px">
+                        <div class="text-right">{{ author.name }}</div>
+                        <div class="text-right">{{ author.group }}</div>
+                        <div class="text-right">{{ author.role }}</div>
+                    </div>
+            </div>
             </div>
         {% endfor %}
         <!-- Fin del Bloque canción -->

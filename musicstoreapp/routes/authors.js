@@ -1,19 +1,37 @@
 const {response} = require("express");
+let authors = [{
+    "name": "author1",
+    "group": "grupo1",
+    "role": "cantante"
+}, {
+    "name": "author2",
+    "group": "grupo2",
+    "role": "cantante"
+}, {
+    "name": "author3",
+    "group": "grupo3",
+    "role": "trompetista"
+},{
+    "name": "J.K. Rowling",
+    "group": "British",
+    "role": "cantante"
+},{
+    "name": "John Grisham",
+    "group": "American",
+    "role": "trompetista"
+},{
+    "name": "Toni Morrison",
+    "group": "African American",
+    "role": "saxofonista"
+},{
+    "name": "Donna Tartt",
+    "group": "American",
+    "role": "pianista"
+}
+];
 module.exports = function(app) {
     app.get("/authors", function (req, res) {
-        let authors = [{
-            "name": "author1",
-            "group": "grupo1",
-            "role": "rol1"
-        }, {
-            "name": "author2",
-            "group": "grupo2",
-            "role": "rol2"
-        }, {
-            "name": "author3",
-            "group": "grupo3",
-            "role": "rol3"
-        }];
+
         let response = {
             authors: authors
         };
@@ -28,7 +46,7 @@ module.exports = function(app) {
             { "name": "pianista"}
         ];
         let response={
-            "roles":roles
+            roles:roles
         };
         res.render("authors/add.twig", response);
     });
@@ -39,6 +57,16 @@ module.exports = function(app) {
             + " rol: " + (req.body.role || "role " + nullParameter)
         res.send(response)
     });
+    app.get('/authors/filter/:role', function (req, res) {
+        let role=req.params.role;
+        let result=authors.filter(a=>a.role===role)
+        let response={
+            authors:result
+        }
+
+        res.render("authors/authors.twig", response);
+    });
+
     app.get('/authors**', function (req, res) {
         res.redirect('/authors')
     });
