@@ -1,4 +1,4 @@
-module.exports = function(app) {
+module.exports = function(app,dbClient) {
     app.get("/songs", function(req, res) {
         let songs=[{
             "title": "Blank space",
@@ -29,10 +29,22 @@ module.exports = function(app) {
         res.send(response);
     });
     app.post('/songs/add', function (req,res){
-        let response="Canción agregada: "+req.body.title+"<br>"
-            + " genero: "+req.body.kind+"<br>"
-            + " precio: "+req.body.price
-        res.send(response)
+        let song = {
+            title: req.body.title,
+            kind: req.body.kind,
+            price: req.body.price
+        }
+        dbClient.connect()
+            .then(() => {
+                const database = dbClient.db("musicStore");
+                const collectionName = 'songs';
+                const songsCollection = database.collection(collectionName);
+                songsCollection.insertOne(song)
+                    .then(result => res.send("canción añadida id: " + result.insertedId))
+                    .then(() => dbClient.close())
+                    .catch(err => res.send("Error al insertar " + err));
+            })
+            .catch(err => res.send("Error de conexión: " + err));
     });
     app.get('/promo*', function (req, res) {
         res.send('Respuesta al patrón promo*');

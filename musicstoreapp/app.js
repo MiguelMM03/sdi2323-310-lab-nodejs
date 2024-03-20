@@ -3,6 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const username = encodeURIComponent("uo287687");
+const password = encodeURIComponent("eaKR7odNUFSdfNGX");
+const cluster = "musicstoreapp.qepzboj.mongodb.net";
+const connectionStrings = `mongodb+srv://${username}:${password}@${cluster}/?retryWrites=true&w=majority&appName=musicstoreapp`;
+const dbClient = new MongoClient(connectionStrings);
 
 var app = express();
 
@@ -12,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-require("./routes/songs.js")(app);
+require("./routes/songs.js")(app,dbClient);
 require("./routes/authors.js")(app);
 
 
