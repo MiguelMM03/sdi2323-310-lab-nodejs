@@ -9,6 +9,8 @@ const password = encodeURIComponent("eaKR7odNUFSdfNGX");
 const cluster = "musicstoreapp.qepzboj.mongodb.net";
 const connectionStrings = `mongodb+srv://${username}:${password}@${cluster}/?retryWrites=true&w=majority&appName=musicstoreapp`;
 const dbClient = new MongoClient(connectionStrings);
+let songsRepository = require("./repositories/songsRepository.js");
+songsRepository.init(app, dbClient);
 
 var app = express();
 
@@ -18,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-require("./routes/songs.js")(app,dbClient);
+require("./routes/songs.js")(app, songsRepository);
 require("./routes/authors.js")(app);
 
 
