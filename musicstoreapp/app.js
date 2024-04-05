@@ -26,7 +26,7 @@ app.use("/songs/add",userSessionRouter);
 app.use("/publications",userSessionRouter);
 app.use("/audios/",userAudiosRouter);
 app.use("/shop/",userSessionRouter)
-app.use("/favourites",userSessionRouter);
+app.use("/songs/favorites",userSessionRouter);
 
 let crypto = require('crypto');
 let fileUpload = require('express-fileupload');
@@ -48,9 +48,9 @@ var indexRouter = require('./routes/index');
 const usersRepository = require("./repositories/usersRepository.js");
 usersRepository.init(app, dbClient);
 require("./routes/users.js")(app, usersRepository);
-const favouritesRepository = require("./repositories/favouritesRepository.js");
-favouritesRepository.init(app, dbClient);
-require("./routes/favourites.js")(app, favouritesRepository);
+const favoritesRepository = require("./repositories/favoritesRepository.js");
+favoritesRepository.init(app, dbClient);
+require("./routes/favorites.js")(app, favoritesRepository);
 require("./routes/songs.js")(app, songsRepository);
 require("./routes/authors.js")(app);
 

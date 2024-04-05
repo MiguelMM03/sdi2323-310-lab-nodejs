@@ -1,6 +1,6 @@
 const {ObjectId} = require("mongodb");
 module.exports = function(app,favouritesRepository) {
-    app.get("/favourites", function (req, res) {
+    app.get("/songs/favorites", function (req, res) {
         const filter = {user: req.session.user};
         favouritesRepository.getFavourites(filter, {})
             .then(
@@ -16,7 +16,7 @@ module.exports = function(app,favouritesRepository) {
             )
             .catch(error => res.status(500).send(error));
     });
-    app.post("/favourites/add", function (req, res) {
+    app.post("/songs/favorites/add", function (req, res) {
         const favourite = {
             songId: new ObjectId(req.body.id),
             date: new Date(),
@@ -32,7 +32,7 @@ module.exports = function(app,favouritesRepository) {
             }
         });
     });
-    app.get("/favourites/delete/:id", function (req, res) {
+    app.get("/songs/favorites/delete/:id", function (req, res) {
         const filter = {songId: new ObjectId(req.params.id)};
         const options = {};
         favouritesRepository.deleteFavourite(filter, options)

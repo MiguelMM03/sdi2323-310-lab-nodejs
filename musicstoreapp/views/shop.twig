@@ -29,7 +29,7 @@
                         <div>{{ song.title }} </div>
                         <div class="small">{{ song.author }} </div>
                         <div class="text-right">{{ song.price }} €</div>
-                        <form method="post" action="/favourites/add">
+                        <form method="post" action="/songs/favorites/add">
                             <input type="hidden" name="id" value="{{ song._id }}">
                             <input type="hidden" name="title" value="{{ song.title }}">
                             <input type="hidden" name="price" value="{{ song.price }}">

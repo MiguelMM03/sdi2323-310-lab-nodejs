@@ -11,9 +11,8 @@ module.exports = {
         try {
             await this.dbClient.connect();
             const database = this.dbClient.db(this.database);
-            const favouritesCollection = database.collection(this.collectionName);
-            const favourites = await favouritesCollection.find(filter, options).toArray();
-            return favourites;
+            const favoritesCollection = database.collection(this.collectionName);
+            return await favoritesCollection.find(filter, options).toArray();
         } catch (error) {
             throw (error);
         }
@@ -22,8 +21,8 @@ module.exports = {
         this.dbClient.connect()
             .then(() => {
                 const database = this.dbClient.db(this.database);
-                const favouritesCollection = database.collection(this.collectionName);
-                favouritesCollection.insertOne(favourite)
+                const favoritesCollection = database.collection(this.collectionName);
+                favoritesCollection.insertOne(favourite)
                     .then(result => callbackFunction({songId: result.insertedId}))
                     .then(() => this.dbClient.close())
                     .catch(err => callbackFunction({error: err.message}));
@@ -34,9 +33,8 @@ module.exports = {
         try {
             await this.dbClient.connect();
             const database = this.dbClient.db(this.database);
-            const favouritesCollection = database.collection(this.collectionName);
-            const result = await favouritesCollection.deleteOne(filter, options);
-            return result;
+            const favoritesCollection = database.collection(this.collectionName);
+            return await favoritesCollection.deleteOne(filter, options);
         } catch (error) {
             throw (error);
         }
