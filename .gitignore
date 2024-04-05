@@ -9,3 +9,5 @@
 /.idea/
 /node_modules/
 /musicstoreapp/node_modules/
+/musicstoreapp/public/audios
+/musicstoreapp/public/covers

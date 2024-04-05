@@ -28,6 +28,10 @@ app.use("/audios/",userAudiosRouter);
 app.use("/shop/",userSessionRouter)
 app.use("/songs/favorites",userSessionRouter);
 
+const userAuthorRouter = require('./routes/userAuthorRouter');
+app.use("/songs/edit",userAuthorRouter);
+app.use("/songs/delete",userAuthorRouter);
+
 let crypto = require('crypto');
 let fileUpload = require('express-fileupload');
 
