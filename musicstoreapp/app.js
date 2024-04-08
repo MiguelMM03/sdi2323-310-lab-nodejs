@@ -60,6 +60,7 @@ favoritesRepository.init(app, dbClient);
 require("./routes/favorites.js")(app, favoritesRepository);
 require("./routes/songs.js")(app, songsRepository);
 require("./routes/authors.js")(app);
+require("./routes/api/songsAPIv1.0.js")(app, songsRepository);
 
 
 // view engine setup
