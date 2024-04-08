@@ -11,7 +11,7 @@ module.exports = function(app,favouritesRepository) {
                         totalPrice:totalPrice
                     }
 
-                    res.render("favourites.twig", result);
+                    res.render("songs/favorites.twig", result);
                 }
             )
             .catch(error => res.status(500).send(error));

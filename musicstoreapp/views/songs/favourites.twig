@@ -1,4 +1,4 @@
-{% extends "layout.twig" %}
+{% extends "../layout.twig" %}
 {% block title %} Mis publicaciones {% endblock %}
 {% block main_container %}
     <h2>Mis favoritos</h2>
@@ -23,7 +23,7 @@
                         <td>{{ song.title }}</td>
                         <td>{{ song.user }}</td>
                         <td>
-                            <a href="/favourites/delete/{{ song.songId }}" class="btn btn-primary">Eliminar</a>
+                            <a href="/favorites/delete/{{ song.songId }}" class="btn btn-primary">Eliminar</a>
                         </td>
                     </tr>
                 {% endfor %}
