@@ -109,23 +109,42 @@ module.exports = function(app,songsRepository) {
             res.send("Se ha producido un error al listar las canciones del usuario " + error)
         });
     });
+    async function userCanBuySong(user, songId) {
+        let filter = {user: user, song_id: songId};
+        let options = {projection: {_id: 0, song_id: 1}};
+        let purchasedIds = await songsRepository.getPurchases(filter, options);
+        if (purchasedIds !== null && purchasedIds.length > 0) {
+            return false;
+        } else {
+            let filter = {_id: songId};
+            let options = {};
+            let song = await songsRepository.findSong(filter, options);
+            return song.author !== user;
+        }
+    }
 
     app.get('/songs/:id', function (req, res) {
         let filter = {_id: new ObjectId(req.params.id)};
         let options = {};
         songsRepository.findSong(filter, options).then(song => {
-            if (song.author === req.session.user) {
-                res.render("songs/song.twig", {song: song, songPurchasedOrOwned: true});
-            } else {
-                let filter = {user: req.session.user, song_id: new ObjectId(req.params.id)};
-                let options = {projection: {_id: 0, song_id: 1}};
-                return songsRepository.getPurchases(filter, options).then(purchasedIds => {
-                    return { purchasedIds: purchasedIds, song: song };
-                });
-            }
-        }).then(result => {
-            let songPurchasedOrOwned = result.purchasedIds !== null && result.purchasedIds.length > 0;
-            res.render("songs/song.twig", {song: result.song, songPurchasedOrOwned: songPurchasedOrOwned});
+            let user=req.session.user;
+            let songId = new ObjectId(req.params.id);
+            userCanBuySong(user, songId).then(canBuySong=> {
+                let settings = {
+                    url: "https://v6.exchangerate-api.com/v6/ac3b39966ce8f8ce6a518ec1/latest/EUR",
+                    method: "get",
+                }
+                let rest = app.get("rest");
+                rest(settings, function (error, response, body) {
+                    let responseObject = JSON.parse(body);
+                    let rateUSD = responseObject.conversion_rates.USD;
+                    // nuevo campo "usd" redondeado a dos decimales
+                    let songValue = song.price / rateUSD
+                    song.usd = Math.round(songValue * 100) / 100;
+                    res.render("songs/song.twig", {song: song,  canBuySong: canBuySong});
+                })
+            });
+
         }).catch(error => {
             res.send("Se ha producido un error al verificar la compra de la canción " + error)
         });
