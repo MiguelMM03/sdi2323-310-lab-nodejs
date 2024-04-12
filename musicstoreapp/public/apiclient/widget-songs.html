@@ -67,8 +67,19 @@
                 console.log("Canción eliminada: " + _id);
                 $("#" + _id).remove(); // eliminar el <tr> de la canción
             },
-            error: function (error) {
-                $("#main-container").load("widget-login.html");
+            error: function (response) {
+                console.log(response);
+                $("#div-errors").remove();
+                let current_error=(typeof response.responseJSON.errors === 'undefined') ? null : response.responseJSON.errors;
+                if(current_error!=null){
+                    $("#widget-songs").prepend("<div id='div-errors' class='alert alert-danger'><ul id='ul-errors'></ul></div>");
+                    for(let i=0; i<current_error.length; i++)
+                        $("#ul-errors").append("<li>"+current_error[i].message+"</li>");
+                }
+                else{
+                    $("#widget-songs").prepend("<div id='div-errors' class='alert alert-danger'>Se ha producido un error inesperado</div>");
+                }
+                //$("#main-container").load("widget-login.html");
             }
         });
     }
